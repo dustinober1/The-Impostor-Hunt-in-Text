@@ -1,6 +1,19 @@
 # The Impostor Hunt in Text: Detecting AI-Generated Text
 
+[![Python Version](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This project is a data science portfolio piece that tackles the "The Impostor Hunt in Text" Kaggle competition. The goal is to distinguish between human-written and AI-generated text.
+
+## 🎯 Motivation
+
+In an era where AI can generate text that is nearly indistinguishable from human writing, the ability to detect AI-generated content is becoming increasingly crucial. This capability is vital for:
+
+*   **Maintaining Authenticity and Credibility:** Distinguishing between human and machine-generated text helps readers assess the trustworthiness of the content they consume.
+*   **Upholding Academic Integrity:** In educational settings, AI detection tools are essential for identifying plagiarism and ensuring that students are submitting their own original work.
+*   **Preventing the Spread of Misinformation:** AI can be used to generate large volumes of fake news and propaganda. Detecting AI-generated text is a critical step in curbing the spread of such misinformation.
+
+This project aims to develop a robust machine learning model that can accurately identify AI-generated text, contributing to the efforts to ensure a more transparent and trustworthy digital environment.
 
 ## 📖 Project Overview
 
@@ -89,8 +102,36 @@ The project is structured as follows:
 
 The ensemble model achieves a validation accuracy of **84.21%**. The feature importance analysis shows that the most important features are related to text length, readability, and sentiment.
 
+### Model Performance
+
+| Model                  | Cross-Validation Accuracy | Validation Accuracy |
+| ---------------------- | ------------------------- | ------------------- |
+| Random Forest          | 0.8417                    | 0.7895              |
+| XGBoost                | 0.8550                    | 0.8421              |
+| LightGBM               | 0.8408                    | 0.8421              |
+| Logistic Regression    | 0.8150                    | 0.8421              |
+| **Ensemble**           | -                         | **0.8421**          |
+
+### Visualizations
+
+The notebook contains a variety of visualizations to explore the data and the model's performance. These include:
+
+*   **Feature Distributions:** Plots showing the distribution of different linguistic features for real and fake text.
+*   **Feature Importance:** A plot showing the most important features for the model.
+*   **Confusion Matrix:** A confusion matrix to visualize the model's performance.
+
+Here is the feature importance plot:
+
+<p align="center">
+  <img src="https://i.imgur.com/YOUR_IMAGE_URL.png" alt="Feature Importance">
+</p>
+
 ## 퓨 Future Work
 
 -   **Advanced Feature Engineering:** Explore more advanced features, such as those based on transformer models (e.g., BERT, RoBERTa).
 -   **Hyperparameter Tuning:** Perform more extensive hyperparameter tuning to optimize the models.
 -   **Data Augmentation:** Use data augmentation techniques to increase the size of the training set and improve model generalization.
+
+## 📄 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.

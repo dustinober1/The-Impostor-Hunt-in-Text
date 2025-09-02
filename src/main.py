@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import numpy as np
+import pickle
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -18,7 +19,7 @@ from src.analyzer import TextAuthenticityAnalyzer
 from src.classifier import TextAuthenticityClassifier
 
 
-BASE_PATH = '/kaggle/input/fake-or-real-the-impostor-hunt/data'
+BASE_PATH = 'data'
 TRAIN_CSV = f'{BASE_PATH}/train.csv'
 TRAIN_DIR = f'{BASE_PATH}/train'  # Contains article_XXXX subdirectories
 TEST_DIR = f'{BASE_PATH}/test'    # Contains article_XXXX subdirectories
@@ -28,8 +29,36 @@ SUBMISSION_FILE = 'submission.csv'
 RANDOM_STATE = 42
 np.random.seed(RANDOM_STATE)
 
+def train_and_save_model():
+    '''Trains the model and saves the classifier and analyzer objects'''
+    print("🚀 Training and saving model...")
+    analyzer = TextAuthenticityAnalyzer()
+    classifier = TextAuthenticityClassifier()
+
+    try:
+        df = analyzer.load_data(TRAIN_DIR, TRAIN_CSV)
+        if len(df) == 0:
+            print("❌ No training data loaded. Please check the file structure.")
+            return
+        print(f"📚 Loaded {len(df)} training samples")
+    except Exception as e:
+        print(f"❌ Error loading data: {e}")
+        return
+
+    X, y = classifier.prepare_training_data(df)
+
+    if X is not None and y is not None:
+        classifier.train_models(X, y)
+
+        # Save the model and analyzer
+        with open("model.pkl", "wb") as f:
+            pickle.dump(classifier, f)
+        with open("analyzer.pkl", "wb") as f:
+            pickle.dump(analyzer, f)
+        
+        print("✅ Model and analyzer saved successfully.")
+
 def main():
-    '''Main execution function for the complete pipeline'''
     print("🚀 Starting Text Authenticity Detection Pipeline")
     print("=" * 60)
 
@@ -92,4 +121,4 @@ def main():
         print("❌ Could not prepare training data. Check the data loading process.")
 
 if __name__ == "__main__":
-    main()
+    train_and_save_model()

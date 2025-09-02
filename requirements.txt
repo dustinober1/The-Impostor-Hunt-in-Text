@@ -13,3 +13,4 @@ catboost
 sentence-transformers
 torch
 transformers
+streamlit

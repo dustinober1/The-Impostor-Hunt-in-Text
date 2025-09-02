@@ -2,14 +2,16 @@ import os
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.metrics import accuracy_score
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import RobustScaler
 from sklearn.feature_selection import SelectKBest, f_classif
 import xgboost as xgb
 import lightgbm as lgb
-from src.analyzer import TextAuthenticityAnalyzer
 
+
+from src.analyzer import TextAuthenticityAnalyzer
 
 class TextAuthenticityClassifier:
     def __init__(self):
@@ -159,7 +161,7 @@ class TextAuthenticityClassifier:
         print(f"✅ Test data prepared: {X_test_df.shape}")
         return X_test_df, test_info
 
-    def train_models(self, X, y, cv_folds=5):
+    def train_models(self, X, y, cv_folds=3):
         '''Train multiple models with cross-validation'''
         print("🤖 Training models...")
         print(f"📊 Training data shape: {X.shape}")
