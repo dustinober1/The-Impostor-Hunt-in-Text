@@ -73,27 +73,53 @@ python main.py
 
 This will generate a `submission.csv` file in the root directory, which can be submitted to the Kaggle competition.
 
+### Web Application
+
+This project includes an interactive web application built with Streamlit. To run the app, use the following command:
+
+```bash
+streamlit run app.py
+```
+
+This will start a local web server and open the application in your browser.
+
+### Testing
+
+Unit tests are included to ensure the reliability of the code. To run the tests, use the following command:
+
+```bash
+pytest
+```
+
 ## 📂 Project Structure
 
 The project is structured as follows:
 
 ```
 .
+├── app.py
 ├── main.py
 ├── notebooks
 │   └── the-impostor-hunt-in-texts.ipynb
 ├── README.md
 ├── requirements.txt
+├── pytest.ini
+├── tests
+│   ├── test_analyzer.py
+│   └── test_classifier.py
 └── src
     ├── __init__.py
     ├── analyzer.py
     └── classifier.py
 ```
 
+-   `app.py`: The Streamlit web application.
 -   `main.py`: The main script to run the pipeline.
 -   `notebooks/`: Contains the Jupyter notebook with a more detailed analysis and advanced models.
 -   `README.md`: This file.
 -   `requirements.txt`: The required libraries to run the project.
+-   `pytest.ini`: Configuration file for pytest.
+-   `tests/`: Contains the unit tests for the project.
 -   `src/`: The source code for the project.
     -   `analyzer.py`: Contains the `TextAuthenticityAnalyzer` class for feature extraction.
     -   `classifier.py`: Contains the `TextAuthenticityClassifier` class for model training and prediction.
