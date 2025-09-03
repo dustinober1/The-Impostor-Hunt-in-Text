@@ -1,59 +1,46 @@
+
 import streamlit as st
 import pandas as pd
-import numpy as np
 import pickle
 from src.analyzer import TextAuthenticityAnalyzer
-from src.classifier import TextAuthenticityClassifier
 
-st.set_page_config(page_title="The Impostor Hunt in Text", page_icon="🕵️‍♀️", layout="wide")
+# Load the trained model and analyzer
+with open('model.pkl', 'rb') as f:
+    model = pickle.load(f)
 
-@st.cache(allow_output_mutation=True)
-def load_model():
-    # Load the trained model and analyzer
-    # Note: You will need to train the model and save it as a pickle file first
-    try:
-        with open("model.pkl", "rb") as f:
-            model = pickle.load(f)
-        with open("analyzer.pkl", "rb") as f:
-            analyzer = pickle.load(f)
-    except FileNotFoundError:
-        st.error("Model not found. Please train the model first.")
-        return None, None
-    return model, analyzer
+with open('analyzer.pkl', 'rb') as f:
+    analyzer = pickle.load(f)
 
-def main():
-    st.title("🕵️‍♀️ The Impostor Hunt in Text")
-    st.markdown("This application uses a machine learning model to distinguish between human-written and AI-generated text. Enter a text below to see the prediction.")
+# App title and description
+st.title('The Impostor Hunt in Text')
+st.write('Detecting AI-Generated Text')
 
-    model, analyzer = load_model()
+# Text input areas
+text1 = st.text_area('Text 1', 'Enter the first text here...')
+text2 = st.text_area('Text 2', 'Enter the second text here...')
 
-    if model and analyzer:
-        text_input = st.text_area("Enter your text here:", height=200)
+# Analyze button
+if st.button('Analyze'):
+    if text1 and text2:
+        # Create a dataframe with the input texts
+        data = {'id': ['test_0000'], 'text1': [text1], 'text2': [text2]}
+        df = pd.DataFrame(data)
 
-        if st.button("Analyze Text"):
-            if text_input:
-                # Create a dummy dataframe for the analyzer
-                data = {'text_1': [text_input], 'text_2': [""], 'real_text_id': [1]}
-                df = pd.DataFrame(data)
+        # Analyze the texts and extract features
+        features = analyzer.analyze(df)
 
-                # Extract features
-                features_df = analyzer.analyze_dataset(df)
+        # Predict the AI-generated text
+        prediction = model.predict(features)[0]
+        probability = model.predict_proba(features)[0]
 
-                # Make prediction
-                prediction = model.predict(features_df)
-                prediction_proba = model.predict_proba(features_df)
+        # Display the result
+        st.subheader('Result')
+        if prediction == 1:
+            st.write('**Text 1 is more likely to be AI-generated.**')
+            st.write(f'Confidence: {probability[0]:.2f}')
+        else:
+            st.write('**Text 2 is more likely to be AI-generated.**')
+            st.write(f'Confidence: {probability[1]:.2f}')
+    else:
+        st.write('Please enter both texts to analyze.')
 
-                # Display result
-                st.subheader("Analysis Result")
-                if prediction[0] == 1:
-                    st.success("This text is likely to be **human-written**.")
-                else:
-                    st.error("This text is likely to be **AI-generated**.")
-                
-                st.write(f"Confidence Score: {prediction_proba[0][prediction[0]]:.2f}")
-
-            else:
-                st.warning("Please enter a text to analyze.")
-
-if __name__ == "__main__":
-    main()
